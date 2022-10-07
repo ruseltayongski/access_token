@@ -14,11 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
+Route::get('/invalid/token', [App\Http\Controllers\LoginController::class, 'invalidAccessToken'])->name('invalid/token');
 Route::prefix('/user')->group(function(){
     Route::post('/login', [App\Http\Controllers\LoginController::class, 'login']);
-    Route::middleware('auth:api')->get('/all', [App\Http\Controllers\LoginController::class, 'index']);
+    Route::middleware('auth:api')->get('/profile', [App\Http\Controllers\LoginController::class, 'getUserProfile']); //protected API
 });

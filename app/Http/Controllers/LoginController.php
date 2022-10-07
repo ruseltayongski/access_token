@@ -5,23 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
 
-    public function index() {
-        return User::all();
+    public function invalidAccessToken() {
+        return response([
+            'message' => 'Unauthenticated'
+        ]);
     }
 
-    public function test() {
-        return "Test";
+    public function getUserProfile() {
+        return Auth::user();
     }
 
     public function login(Request $request) {
-        $login = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string'
-        ]);
+        $login = [
+            'username' => $request->username,
+            'password' => $request->password
+        ];
 
         if( !Auth::attempt($login) ) {
             return response([
@@ -32,7 +35,6 @@ class LoginController extends Controller
         $accessToken = Auth::user()->createToken('authToken')->accessToken;
 
         return response([
-            'user' => Auth::user(),
             'access_token' => $accessToken
         ]);
 
