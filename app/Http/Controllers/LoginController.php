@@ -12,7 +12,9 @@ class LoginController extends Controller
 
     public function invalidAccessToken() {
         return response([
-            'message' => 'Unauthenticated'
+            'error' => 'Unauthorized',
+            'message' => 'Full authentication is required to access this resource',
+            'status' => '401'
         ]);
     }
 
