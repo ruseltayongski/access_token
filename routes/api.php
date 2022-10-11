@@ -18,4 +18,5 @@ Route::get('/invalid/token', [App\Http\Controllers\LoginController::class, 'inva
 Route::prefix('/user')->group(function(){
     Route::post('/login', [App\Http\Controllers\LoginController::class, 'login']);
     Route::middleware('auth:api')->get('/profile', [App\Http\Controllers\LoginController::class, 'getUserProfile']); //protected API
+    Route::middleware('auth:api')->get('/all/active', [App\Http\Controllers\LoginController::class, 'getActiveUser']); //protected API
 });
