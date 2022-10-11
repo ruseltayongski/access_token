@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PersonalInformation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -16,6 +17,11 @@ class LoginController extends Controller
             'message' => 'Full authentication is required to access this resource',
             'status' => '401'
         ]);
+    }
+
+    public function getActiveUser() {
+        $pis = PersonalInformation::where('employee_status',1)->get();
+        return $pis;
     }
 
     public function getUserProfile() {
