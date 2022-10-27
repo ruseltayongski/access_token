@@ -19,8 +19,22 @@ class LoginController extends Controller
         ]);
     }
 
-    public function getActiveUser() {
-        $pis = PersonalInformation::where('employee_status',1)->paginate(15);
+    public function getActiveUser(Request $request) {
+        $pis = PersonalInformation::where('employee_status',1);
+        $keyword = $request->search_keyword;
+        if($keyword) {
+            $pis = $pis->where(function($q) use ($keyword){
+                $q->where('fname','like',"%$keyword%")
+                    ->orWhere('mname','like',"%$keyword%")
+                    ->orWhere('lname','like',"%$keyword%")
+                    ->orWhere('userid','like',"%$keyword%")
+                    ->orWhereRaw("concat(fname,' ',lname,', ',mname) like '%$keyword%' ")
+                    ->orWhereRaw("concat(fname,' ',lname) like '%$keyword%' ")
+                    ->orWhereRaw("concat(lname,', ',mname) like '%$keyword%' ")
+                    ->orWhereRaw("concat(fname,', ',mname) like '%$keyword%' ");
+            });
+        }
+        $pis =  $pis->paginate(15);
         return $pis;
     }
 
