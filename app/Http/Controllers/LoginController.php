@@ -20,7 +20,7 @@ class LoginController extends Controller
     }
 
     public function getActiveUser() {
-        $pis = PersonalInformation::where('employee_status',1)->get();
+        $pis = PersonalInformation::where('employee_status',1)->paginate(15);
         return $pis;
     }
 
