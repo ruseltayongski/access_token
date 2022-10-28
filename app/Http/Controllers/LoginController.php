@@ -33,7 +33,7 @@ class LoginController extends Controller
               )
             ->leftJoin('dts.designation','designation.id','=','personal_information.designation_id')
             ->leftJoin('dts.division','division.id','=','personal_information.division_id')
-            ->leftJoin('dts.section','section','=','personal_information.section_id')
+            ->leftJoin('dts.section','section.id','=','personal_information.section_id')
             ->where('personal_information.employee_status',1)
             ->where('personal_information.userid','!=','admin');
         $keyword = $request->search_keyword;
