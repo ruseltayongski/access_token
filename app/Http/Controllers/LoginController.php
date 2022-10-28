@@ -27,13 +27,13 @@ class LoginController extends Controller
                 'personal_information.lname',
                 'personal_information.sex',
                 'personal_information.picture',
-                'dts.designation.description as designation',
-                'dts.division.description as division',
-                'dts.section.description as section'
+                'designation.description as designation',
+                'division.description as division',
+                'section.description as section'
               )
-            ->leftJoin('dts.designation','dts.designation.id','=','personal_information.designation_id')
-            ->leftJoin('dts.division','dts.division.id','=','personal_information.division_id')
-            ->leftJoin('dts.section','dts.section','=','personal_information.section_id')
+            ->leftJoin('dts.designation','designation.id','=','personal_information.designation_id')
+            ->leftJoin('dts.division','division.id','=','personal_information.division_id')
+            ->leftJoin('dts.section','section','=','personal_information.section_id')
             ->where('personal_information.employee_status',1)
             ->where('personal_information.userid','!=','admin');
         $keyword = $request->search_keyword;
