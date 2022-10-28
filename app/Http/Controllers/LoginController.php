@@ -22,6 +22,7 @@ class LoginController extends Controller
     public function getActiveUser(Request $request) {
         $pis = PersonalInformation::
               select(
+                'personal_information.userid',
                 'personal_information.fname',
                 'personal_information.mname',
                 'personal_information.lname',
