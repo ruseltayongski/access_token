@@ -20,18 +20,33 @@ class LoginController extends Controller
     }
 
     public function getActiveUser(Request $request) {
-        $pis = PersonalInformation::where('employee_status',1);
+        $pis = PersonalInformation::
+              select(
+                'personal_information.fname',
+                'personal_information.mname',
+                'personal_information.lname',
+                'personal_information.sex',
+                'personal_information.picture',
+                'dts.designation.description as designation',
+                'dts.division.description as division',
+                'dts.section.description as section'
+              )
+            ->leftJoin('dts.designation','dts.designation.id','=','personal_information.designation_id')
+            ->leftJoin('dts.division','dts.division.id','=','personal_information.division_id')
+            ->leftJoin('dts.section','dts.section','=','personal_information.section_id')
+            ->where('personal_information.employee_status',1)
+            ->where('personal_information.userid','!=','admin');
         $keyword = $request->search_keyword;
         if($keyword) {
             $pis = $pis->where(function($q) use ($keyword){
-                $q->where('fname','like',"%$keyword%")
-                    ->orWhere('mname','like',"%$keyword%")
-                    ->orWhere('lname','like',"%$keyword%")
-                    ->orWhere('userid','like',"%$keyword%")
-                    ->orWhereRaw("concat(fname,' ',lname,', ',mname) like '%$keyword%' ")
-                    ->orWhereRaw("concat(fname,' ',lname) like '%$keyword%' ")
-                    ->orWhereRaw("concat(lname,', ',mname) like '%$keyword%' ")
-                    ->orWhereRaw("concat(fname,', ',mname) like '%$keyword%' ");
+                $q->where('personal_information.fname','like',"%$keyword%")
+                    ->orWhere('personal_information.mname','like',"%$keyword%")
+                    ->orWhere('personal_information.lname','like',"%$keyword%")
+                    ->orWhere('personal_information.userid','like',"%$keyword%")
+                    ->orWhereRaw("concat(personal_information.fname,' ',personal_information.lname,', ',personal_information.mname) like '%$keyword%' ")
+                    ->orWhereRaw("concat(personal_information.fname,' ',personal_information.lname) like '%$keyword%' ")
+                    ->orWhereRaw("concat(personal_information.lname,', ',personal_information.mname) like '%$keyword%' ")
+                    ->orWhereRaw("concat(personal_information.fname,', ',personal_information.mname) like '%$keyword%' ");
             });
         }
         $pis =  $pis->paginate(15);
